@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package echo;
+option go_package = "./echo";
+
+service EchoService {
+  rpc Echo(EchoRequest) returns (Response);
+  rpc FixedResponse(FixedResponseRequest) returns (Response);
+}
+
+message EchoRequest {
+  string message = 1;
+}
+
+message Response {
+  string message = 1;
+}
+
+message FixedResponseRequest {
+}
