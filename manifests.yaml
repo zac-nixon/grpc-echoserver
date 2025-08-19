@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpcechoserver
-  namespace: default
 spec:
   ports:
     - port: 50051
@@ -17,7 +16,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grpcechoserver
-  namespace: default
 spec:
   selector:
     matchLabels:
@@ -30,7 +28,7 @@ spec:
     spec:
       containers:
         - image: public.ecr.aws/u6k2n8q7/nixozach/grpc-echoserver:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: grpcechoserver
           args:
             - my-fixed-response

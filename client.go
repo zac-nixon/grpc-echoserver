@@ -2,19 +2,29 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"fmt"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"log"
 	"time"
 
 	pb "echo-server/echo"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
-	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	target := "grpcaaa-1564044849.us-east-1.elb.amazonaws.com:443"
+	fmt.Println(target)
+	fmt.Println("using skip verify")
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: true, // This skips all certificate verification, including expiry.
+	}
+
+	conn, err := grpc.NewClient(target, grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)), grpc.WithAuthority("foo.com"))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
+
 	defer conn.Close()
 
 	c := pb.NewEchoServiceClient(conn)
