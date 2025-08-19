@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -16,10 +17,12 @@ type server struct {
 }
 
 func (s *server) Echo(_ context.Context, req *pb.EchoRequest) (*pb.Response, error) {
+	fmt.Println("Got Echo request")
 	return &pb.Response{Message: req.Message}, nil
 }
 
 func (s *server) FixedResponse(_ context.Context, _ *pb.FixedResponseRequest) (*pb.Response, error) {
+	fmt.Println("Got FixedResponse request")
 	return &pb.Response{Message: s.fr}, nil
 }
 

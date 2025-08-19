@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpcechoserver
+  namespace: default
+spec:
+  ports:
+    - port: 50051
+      name: tcp50051
+      targetPort: 50051
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: udpechoserver
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpcechoserver
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: udpechoserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: udpechoserver
+    spec:
+      containers:
+        - image: public.ecr.aws/u6k2n8q7/nixozach/grpc-echoserver:latest
+          imagePullPolicy: IfNotPresent
+          name: grpcechoserver
+          args:
+            - my-fixed-response
+          ports:
+            - containerPort: 50051
+              name: tcp50051
+              protocol: TCP
